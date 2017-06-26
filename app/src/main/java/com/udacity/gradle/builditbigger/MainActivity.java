@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -21,6 +22,15 @@ import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
+    // for testing
+    CountingIdlingResource idlingResource;
+
+    public CountingIdlingResource getIdlingResource(){
+        if(idlingResource == null) {
+            this.idlingResource = new CountingIdlingResource("MainActivity");
+        }
+        return idlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +109,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            getIdlingResource().increment();
+        }
+
+        @Override
         protected void onPostExecute(String result) {
             renderJoke(result);
+            getIdlingResource().decrement();
         }
     }
 }

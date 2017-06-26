@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JokeUI</string>
+    <string name="joke_title">Joke</string>
 </resources>
